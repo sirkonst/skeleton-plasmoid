@@ -26,9 +26,10 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyKDE4.plasma import *
 from PyKDE4 import plasmascript
+from PyKDE4.kdecore import *
 
 class DesktopPopup(QGraphicsWidget):
-    def __init__(self,parent):
+    def __init__(self, parent):
         QGraphicsWidget.__init__(self)
         self.applet = parent
 
@@ -36,8 +37,9 @@ class DesktopPopup(QGraphicsWidget):
         self.count = 0
 
         # Create controls
-        self.edit = Plasma.LineEdit(self)
-        self.edit.setText(str(self.count))
+        self.notify = Plasma.PushButton(self)
+        self.notify.setText(i18n('Create notification'))
+        self.notify.clicked.connect(self.applet.notifyAction)
 
         self.button = Plasma.PushButton(self)
         self.button.setText('Change')
@@ -46,7 +48,7 @@ class DesktopPopup(QGraphicsWidget):
         # Layout
         self.layout = QGraphicsLinearLayout(Qt.Vertical, self)
         self.layout.setSizePolicy(QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum))
-        self.layout.addItem(self.edit)
+        self.layout.addItem(self.notify)
         self.layout.addItem(self.button)
 
         self.setLayout(self.layout)

@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
-plasmapkg -u popup-applet-skeleton
+plasmapkg -u skeleton-plasmoid
 kbuildsycoca4

@@ -8,48 +8,17 @@ from PyKDE4.solid import *
 from PyKDE4.plasma import *
 from PyKDE4 import plasmascript
 from PyQt4 import QtCore
-import ConfigParser
 
-class PyPopup(QGraphicsWidget):
-	def __init__(self,parent):
-		QGraphicsWidget.__init__(self)
-		self.applet = parent
+import os
 
-	def init(self):
-		self.count = 0
-		
-		config = ConfigParser.RawConfigParser()
-		config.readfp(open(self.applet.package().path() + "contents/data/languages.ini"))
-		options = config.items('languages')
-		
-		# Create controls
-		self.selectFrom = Plasma.ComboBox(self)
-		self.selectTo = Plasma.ComboBox(self)
-		self.webView = Plasma.WebView(self)
-		
-		for i in options:
-			self.selectFrom.addItem(i[0])
-			self.selectTo.addItem(i[0])
+# popup design
+from popup import *
 
-		self.button = Plasma.PushButton(self)
-		self.button.setText('Translate')
-		self.button.clicked.connect(self.clicked)
+# config tab
+from config import *
 
-		# Layout
-		self.layout = QGraphicsLinearLayout(Qt.Vertical, self)
-		self.layout.setSizePolicy(QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum))
-		self.layout.addItem(self.selectFrom)
-		self.layout.addItem(self.selectTo)
-		self.layout.addItem(self.webView)
-		self.layout.addItem(self.button)
-		self.setLayout(self.layout)
-
-		self.setMinimumWidth(260)
-		self.setMinimumHeight(180)
-
-	def clicked(self):
-		print 'PyPopup: clicked'
-		self.count += 1
+# utilities
+from utilities import *
 
 class Skeleton(plasmascript.Applet):
 	def __init__(self, parent, args=None):
@@ -58,6 +27,13 @@ class Skeleton(plasmascript.Applet):
 	def init(self):
 		# popup window object
 		self._widget = None
+		
+		# Setup configuration
+		self.settings = {}
+		self.settings['version'] = 0.1
+		conf = self.config()
+		
+		self.settings['icon'] = conf.readEntry('icon', 'system-run').toString()
 		
 		# we have configuration options
 		self.setHasConfigurationInterface(True)
@@ -74,41 +50,90 @@ class Skeleton(plasmascript.Applet):
 		# style
 		self.theme = Plasma.Svg(self)
 		
-		
-		
-		
-		
-
-		self.icon = Plasma.IconWidget()
-		self.layout.addItem(self.icon)
+		kdehome = kdeHome()
+		if not os.path.exists(kdehome + 'share/apps/skeleton-plasmoid/skeleton-plasmoid.notifyrc'):
+			if os.path.exists(kdehome + 'share/apps'):
+				createNotifyrc(kdehome)
 		
 		# Only register the tooltip in panels
 		if ((self.formFactor() == Plasma.Horizontal) or (self.formFactor() == Plasma.Vertical)):
+			# in panel
 			Plasma.ToolTipManager.self().registerWidget(self.applet)
-			print("PyPopupApplet: In Panel")
 		else:
+			# not in panel
 			Plasma.ToolTipManager.self().unregisterWidget(self.applet)
-			print("PyPopupApplet: Not in Panel")
-
-		loader = KIconLoader()
-		size = min(self.icon.size().width(), self.icon.size().height()) * 2
-		pix = KIconLoader.loadIcon(loader, self.package().path() + "contents/icons/google.png", KIconLoader.NoGroup, size)
-		paint = QPainter(pix)
-		paint.setRenderHint(QPainter.SmoothPixmapTransform)
-		paint.setRenderHint(QPainter.Antialiasing)
-		paint.end()
 		
-		self._widget = PyPopup(self)
+		# define a popup window (on click on icon or when is places on the desktop)
+		self._widget = DesktopPopup(self)
 		self._widget.init()
 		self.setGraphicsWidget(self._widget)
 		self.applet.setPassivePopup(True)
-		self.setPopupIcon(self.package().path() + "contents/icons/google.png")
+		self.setPopupIcon(self.settings['icon'])
 		self.setGraphicsWidget(self._widget)
 		
 		
-	def iconClicked(self):
-
-		print self._widget
+	# ---------------------- configuration ------------------------#
+	# construct configuration window
+	def createConfigurationInterface(self, parent):
+		self.configpage = Config(self, self.settings)
+		p = parent.addPage(self.configpage, i18n('Skeleton'))
+		p.setIcon(KIcon(self.icon()))
 		
+		self.connect(parent, SIGNAL('okClicked()'), self.configAccepted)
+		self.connect(parent, SIGNAL('cancelClicked()'), self.configDenied)
+		
+	# show configuration window
+	def showConfigurationInterface(self):
+		plasmascript.Applet.showConfigurationInterface(self)
+		return
+		
+	# if config accepted
+	def configAccepted(self):
+		icon = self.configpage.ui.icon_path.text()
+		conf = self.config()
+		conf.writeEntry('icon', str(icon))
+		
+		print 'config: accepted'
+	
+	# if config denied
+	def configDenied(self):
+		print 'config: denied'
+		
+	# ---------------------- /configuration ------------------------#
+	
+	# ---------------------- context ---------------------- #
+	''' Custom contextual actions '''
+	def contextualActions(self):
+		actions = []
+
+		refresh = QAction(KIcon('text-speak'), i18n('Notify'), self)
+		self.connect(refresh, SIGNAL('triggered()'), self.notifyAction)
+		actions.append(refresh)
+
+		return actions
+        
+        # ---------------------- context actions ---------------------- #
+        
+	''' notify context action '''
+	def notifyAction(self):
+		self.notify('test-notification', i18n('Notification fired.'))
+        
+        # ---------------------- /context actions ---------------------- #
+        
+	# ---------------------- /context ---------------------- #
+	
+	# ---------------------- notifications ---------------------- #
+	
+	''' Raise notification '''
+	def notify(self, ntype, message = ''):
+		print '[skeleton-plasmoid]: notifying.. type "%s", message "%s"' % (ntype, message)
+		KNotification.event(ntype, message, QPixmap(self.icon()), None, KNotification.CloseOnTimeout, 
+			KComponentData('skeleton-plasmoid', 'skeleton-plasmoid', KComponentData.SkipMainComponentRegistration)
+		)
+		
+	# ---------------------- /notifications  ---------------------- #
+	
+	
+	# -------------------- utilities ------------------------------- #
 def CreateApplet(parent):
 	return Skeleton(parent)
