@@ -1,32 +1,33 @@
 Hi,
-For a long time I have beed collecting information about creation of plasmoids in Python. 
-All that I found, I have implemented in this demo plasmoid (but many features are still in development).
-
-Hopefully, it will be useful for you and help you to create more great plasmoids.
-
-IMPLEMENTED SO FAR:
-1. Notifications
-2. Configuration management (plus configuration window)
-3. Tooltips
-4. Ability to change form-factor between panel plasmoids and desktop versions
-5. Custom contextual actions
-6. Transparent compilation of UI from *.ui files
-7. Localization
-
-PLANNED:
-1. Wallet integration
-2. DataEngines
-3. Solid samples (eg. Networking)
-4. Refactoring of current codebase
-5. Your proposals.
-
-NOTE:
-1. Application does not use self.config() method provided by KDE SC due to some issues.
-By default, skeleton implements ConfigParser.RawConfigParser as engine for manipulation with configuration.
-
-USEFULL LINKS:
-Plasma::Applet class reference
-http://www.purinchu.net/kdelibs-apidocs/plasma/html/classPlasma_1_1Applet.html
+For a long time I have been collecting information about creation of plasmoids in Python.  
+All that I found, I have implemented in this demo (but many features are still in development). 
+ 
+Hopefully, it will be useful for you and help you to create more great plasmoids. 
+ 
+IMPLEMENTED SO FAR: 
+1. Notifications 
+2. Configuration management (plus configuration window) 
+3. Tooltips 
+4. Ability to change form-factor between panel plasmoids and desktop versions on-demand 
+5. Custom contextual actions 
+6. Transparent compilation of UI from *.ui files 
+7. Localization 
+ 
+PLANNED: 
+1. Wallet integration 
+2. DataEngines 
+3. Solid samples (eg. Networking) 
+4. Refactoring of current codebase 
+5. Documentation 
+6. Your proposals. 
+ 
+NOTE: 
+1. Application does not use self.config() method provided by KDE SC due to some issues. 
+By default, skeleton implements ConfigParser.RawConfigParser as engine for manipulation with configuration. 
+ 
+USEFULL LINKS: 
+Plasma::Applet class reference 
+http://www.purinchu.net/kdelibs-apidocs/plasma/html/classPlasma_1_1Applet.html 
 
 CONTACTS:
 Alex Oleshkevich, <alex.oleshkevich@gmail.com>
