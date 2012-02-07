@@ -35,12 +35,12 @@ class Util():
 		return unicode(KGlobal.dirs().localkdedir())
 		
 	def createNotifyrc(self):
-		print '[%s] creating notifyrc' % (self.applet.name)
+		print '[%s] creating notifyrc' % (self.applet.internameName)
 		# Create gmail-plasmoid directory if required
-		self.createDirectory(self.kdeHome() + 'share/apps/%s' % self.applet.name)
+		self.createDirectory(self.kdeHome() + 'share/apps/%s' % self.applet.internameName)
 
-		source = self.applet.package().path() + 'contents/misc/%s.notifyrc' % self.applet.name
-		destination = self.kdeHome() + 'share/apps/%s/%s.notifyrc' % (self.applet.name, self.applet.name)
+		source = self.applet.package().path() + 'contents/misc/%s.notifyrc' % self.applet.internameName
+		destination = self.kdeHome() + 'share/apps/%s/%s.notifyrc' % (self.applet.internameName, self.applet.internameName)
 		copyfile(source, destination)
 		
 	

@@ -49,7 +49,7 @@ from notifications import *
 class Skeleton(plasmascript.Applet):
 	def __init__(self, parent, args=None):
 		plasmascript.Applet.__init__(self, parent)
-		self.name = 'skeleton-plasmoid'
+		self.internameName = 'skeleton-plasmoid'
 		self.parent = parent
 
 	def init(self):
@@ -60,6 +60,7 @@ class Skeleton(plasmascript.Applet):
 		# Setup configuration
 		self.settings = {}
 		self.settings['version'] = 0.1
+		self.settings['icon'] = 'system-run'
 		
 		# we have configuration options
 		self.setHasConfigurationInterface(True)
@@ -96,7 +97,7 @@ class Skeleton(plasmascript.Applet):
 	# ---------------------- configuration ------------------------#
 	# construct configuration window
 	def createConfigurationInterface(self, parent):
-		self.configpage = ConfigWindow(self, parent, self.settings)
+		self.configpage = ConfigWindow(self, self.settings)
 		page = parent.addPage(self.configpage, i18n(self.name()))
 		page.setIcon(KIcon(self.icon()))
 		

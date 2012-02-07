@@ -33,16 +33,16 @@ class Notifications():
 	def __init__(self, applet):
 		self.applet = applet
 		self.util = Util(self.applet)
-		if not os.path.exists(self.util.kdeHome() + 'share/apps/%s/%s.notifyrc' % (self.applet.name, self.applet.name)):
+		if not os.path.exists(self.util.kdeHome() + 'share/apps/%s/%s.notifyrc' % (self.applet.internameName, self.applet.internameName)):
 			if os.path.exists(self.util.kdeHome() + 'share/apps'):
-				if os.path.exists(self.applet.package().path() + 'contents/misc/%s.notifyrc' % self.applet.name):
+				if os.path.exists(self.applet.package().path() + 'contents/misc/%s.notifyrc' % self.applet.internameName):
 					self.util.createNotifyrc()
 		
 	''' Raise notification '''
 	def notify(self, ntype, message = ''):
-		print '[%s]: notifying.. type "%s", message "%s"' % (self.applet.name, ntype, message)
+		print '[%s]: notifying.. type "%s", message "%s"' % (self.applet.internameName, ntype, message)
 		KNotification.event(ntype, message, QPixmap(self.applet.icon()), None, KNotification.CloseOnTimeout, 
-			KComponentData(self.applet.name, self.applet.name, KComponentData.SkipMainComponentRegistration)
+			KComponentData(self.applet.internameName, self.applet.internameName, KComponentData.SkipMainComponentRegistration)
 		)
 		
 	
