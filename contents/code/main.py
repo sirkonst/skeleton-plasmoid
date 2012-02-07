@@ -1,4 +1,27 @@
 # -*- coding: utf-8 -*-
+#   Copyright 2012 Alex Oleshkevich <alex.oleshkevich@gmail.com>
+#
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU Library General Public License as
+#   published by the Free Software Foundation; either version 2 or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#
+#   GNU General Public License for more details
+#
+#
+#   You should have received a copy of the GNU Library General Public
+#   License along with this program; if not, write to the
+#   Free Software Foundation, Inc.,
+#
+#   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+#
+
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyKDE4.kdecore import *
@@ -12,28 +35,31 @@ from PyQt4 import QtCore
 import os
 
 # popup design
-from popup import *
+from popupwindow import *
 
 # config tab
-from config import *
+from configwindow import *
 
 # utilities
-from utilities import *
+from util import *
+
+# notifications
+from notifications import *
 
 class Skeleton(plasmascript.Applet):
 	def __init__(self, parent, args=None):
-		plasmascript.Applet.__init__(self,parent)
+		plasmascript.Applet.__init__(self, parent)
+		self.name = 'skeleton-plasmoid'
+		self.parent = parent
 
 	def init(self):
 		# popup window object
 		self._widget = None
+		self.notifications = Notifications(self)
 		
 		# Setup configuration
 		self.settings = {}
 		self.settings['version'] = 0.1
-		conf = self.config()
-		
-		self.settings['icon'] = conf.readEntry('icon', 'system-run').toString()
 		
 		# we have configuration options
 		self.setHasConfigurationInterface(True)
@@ -50,11 +76,6 @@ class Skeleton(plasmascript.Applet):
 		# style
 		self.theme = Plasma.Svg(self)
 		
-		kdehome = kdeHome()
-		if not os.path.exists(kdehome + 'share/apps/skeleton-plasmoid/skeleton-plasmoid.notifyrc'):
-			if os.path.exists(kdehome + 'share/apps'):
-				createNotifyrc(kdehome)
-		
 		# Only register the tooltip in panels
 		if ((self.formFactor() == Plasma.Horizontal) or (self.formFactor() == Plasma.Vertical)):
 			# in panel
@@ -64,20 +85,20 @@ class Skeleton(plasmascript.Applet):
 			Plasma.ToolTipManager.self().unregisterWidget(self.applet)
 		
 		# define a popup window (on click on icon or when is places on the desktop)
-		self._widget = DesktopPopup(self)
+		self._widget = PopupWindow(self)
 		self._widget.init()
 		self.setGraphicsWidget(self._widget)
 		self.applet.setPassivePopup(True)
-		self.setPopupIcon(self.settings['icon'])
+		self.setPopupIcon(self.icon())
 		self.setGraphicsWidget(self._widget)
 		
 		
 	# ---------------------- configuration ------------------------#
 	# construct configuration window
 	def createConfigurationInterface(self, parent):
-		self.configpage = Config(self, self.settings)
-		p = parent.addPage(self.configpage, i18n('Skeleton'))
-		p.setIcon(KIcon(self.icon()))
+		self.configpage = ConfigWindow(self, parent, self.settings)
+		page = parent.addPage(self.configpage, i18n(self.name()))
+		page.setIcon(KIcon(self.icon()))
 		
 		self.connect(parent, SIGNAL('okClicked()'), self.configAccepted)
 		self.connect(parent, SIGNAL('cancelClicked()'), self.configDenied)
@@ -112,27 +133,12 @@ class Skeleton(plasmascript.Applet):
 
 		return actions
         
-        # ---------------------- context actions ---------------------- #
         
 	''' notify context action '''
 	def notifyAction(self):
-		self.notify('test-notification', i18n('Notification fired.'))
-        
-        # ---------------------- /context actions ---------------------- #
+		self.notifications.notify('button-clicked', i18n('Notification fired.'))
         
 	# ---------------------- /context ---------------------- #
-	
-	# ---------------------- notifications ---------------------- #
-	
-	''' Raise notification '''
-	def notify(self, ntype, message = ''):
-		print '[skeleton-plasmoid]: notifying.. type "%s", message "%s"' % (ntype, message)
-		KNotification.event(ntype, message, QPixmap(self.icon()), None, KNotification.CloseOnTimeout, 
-			KComponentData('skeleton-plasmoid', 'skeleton-plasmoid', KComponentData.SkipMainComponentRegistration)
-		)
-		
-	# ---------------------- /notifications  ---------------------- #
-	
 	
 	# -------------------- utilities ------------------------------- #
 def CreateApplet(parent):

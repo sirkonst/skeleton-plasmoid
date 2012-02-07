@@ -1,0 +1,10 @@
+[Global]
+IconName=system-run
+Comment=skeleton plasmoid
+Name=Skeleton Applet
+
+[Event/button-clicked]
+Name=Button Clicked   
+Name[be]=Кнопка нацiснута    
+Sound=KDE-Im-New-Mail.ogg
+Action=Popup|Sound
