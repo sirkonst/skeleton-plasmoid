@@ -31,6 +31,6 @@ from PyKDE4 import plasmascript
 class ConfigWindow(QWidget):
     def __init__(self, parent, settings):
         QWidget.__init__(self)
-        self.ui = uic.loadUi(parent.package().filePath('ui', 'configform.ui'), self)
-        self.ui.icon_path.setText(settings['icon'])
+        self.ui = uic.loadUi(parent.package().filePath('ui', 'configwindow.ui'), self)
+        self.ui.value.setText(settings.get('customvalue', ''))
         self.parent = parent

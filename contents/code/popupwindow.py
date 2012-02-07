@@ -34,24 +34,22 @@ class PopupWindow(QGraphicsWidget):
         self.applet = parent
 
     def init(self):
-        self.count = 0
-
         # Create controls
         self.notify = Plasma.PushButton(self)
         self.notify.setText(i18n('Create notification'))
         self.notify.clicked.connect(self.applet.notifyAction)
+        
+        self.fromconfig = Plasma.Label(self)
+        self.fromconfig.setText('From config: %s' % self.applet.settings.get('customvalue'))
 
         # Layout
         self.layout = QGraphicsLinearLayout(Qt.Vertical, self)
         self.layout.setSizePolicy(QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum))
-        self.layout.addItem(self.notify)
 
+        self.layout.addItem(self.fromconfig)
+        self.layout.addItem(self.notify)
+        
         self.setLayout(self.layout)
 
         self.setMinimumWidth(260)
         self.setMinimumHeight(180)
-
-    def clicked(self):
-        print 'PyPopup: clicked'
-        self.count += 1
-        self.edit.setText(str(self.count))

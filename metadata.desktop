@@ -1,19 +1,20 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=Popup Applet Skeleton
+Name=Skeleton Plasmoid
+Comment=The skeleton for developing plasmoids
 Type=Service
-ServiceTypes=Plasma/PopupApplet
+ServiceTypes=Plasma/Applet,Plasma/PopupApplet
 Icon=system-run
 
 X-Plasma-API=python
 X-Plasma-MainScript=code/main.py
+X-Plasma-NotificationArea=true
 X-KDE-PluginInfo-Author=Alex Oleshkevich
 X-KDE-PluginInfo-Email=alex.oleshkevich@gmail.com
 X-KDE-PluginInfo-Name=skeleton-plasmoid
 X-KDE-PluginInfo-Version=0.1
 X-KDE-PluginInfo-Website=http://kde-look.org/
-X-KDE-PluginInfo-Category=Development
-X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-Category=Development Tools
+X-KDE-PluginInfo-Depends=plasma-scriptengine-python
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-EnabledByDefault=true
-X-Plasma-NotificationArea=true
