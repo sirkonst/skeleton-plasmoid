@@ -22,7 +22,6 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 
-import ConfigParser
 from util import *
 
 ##
@@ -31,18 +30,7 @@ from util import *
 class Config():
 	def __init__(self, applet):
 		self.applet = applet
-		self.util = Util(self.applet)
-		self.config = ConfigParser.RawConfigParser()
-		self.path = self.util.kdeHome() + 'share/apps/%s/%s.ini' % (self.applet._name, self.applet._name)
-		
-		if not os.path.exists(self.path):
-			if os.path.exists(self.util.kdeHome() + 'share/apps'):
-				if os.path.exists(self.applet.package().path() + 'contents/misc/%s.ini' % self.applet._name):
-					self.util.createConfig()
-					print '[%s]: config created' % self.applet._name
-		
-		self.config.readfp(open(self.path))
-		print '[%s]: config initialized' % self.applet._name
+		self.config = self.applet.config()
 		
 	##
 	# Read option from configuration file
@@ -51,13 +39,8 @@ class Config():
 	# @param default mixed The default value if option is not found 
 	# @param section string [optional] The section to write in
 	# @return int|string The value
-	def get(self, key, default = '', section = 'general'):
-		option = self.config.get(section, key)
-		
-		if option == None:
-			return default
-		else:
-			return option
+	def get(self, key, default = ''):
+		return self.config.readEntry(key, default).toString()
 
 	##
 	# Set option to configuration file
@@ -67,20 +50,4 @@ class Config():
 	# @param section string [optional] The section to write in
 	# @return void
 	def set(self, key, value, section = 'general'):
-		self.config.set(section, key, value)
-		f = open(self.path, 'w')
-		self.config.write(f)
-		
-	##
-	# Get config object
-	#
-	# @return RawConfigParser
-	def getConfig(self):
-		return self.config
-		
-	##
-	# Get configuration file path
-	#
-	# @return string
-	def getPath(self):
-		return self.path
+		self.config.writeEntry(key, value)

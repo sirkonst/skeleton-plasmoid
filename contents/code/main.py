@@ -107,8 +107,8 @@ class Skeleton(plasmascript.Applet):
 		page = parent.addPage(self.configpage, i18n(self.name()))
 		page.setIcon(KIcon(self.icon()))
 		
-		self.connect(parent, SIGNAL('okClicked()'), self.configAccepted)
-		self.connect(parent, SIGNAL('cancelClicked()'), self.configDenied)
+		parent.okClicked.connect(self.configAccepted)
+		parent.cancelClicked.connect(self.configDenied)
 		
 	# show configuration window
 	def showConfigurationInterface(self):
@@ -133,7 +133,7 @@ class Skeleton(plasmascript.Applet):
 		actions = []
 
 		refresh = QAction(KIcon('text-speak'), i18n('Notify'), self)
-		self.connect(refresh, SIGNAL('triggered()'), self.notifyAction)
+		refresh.triggered.connect(self.notifyAction)
 		actions.append(refresh)
 
 		return actions
