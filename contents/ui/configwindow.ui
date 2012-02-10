@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>450</width>
-    <height>106</height>
+    <width>464</width>
+    <height>107</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -24,9 +24,12 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>447</width>
-     <height>101</height>
+     <width>16777215</width>
+     <height>16777215</height>
     </rect>
+   </property>
+   <property name="inputMethodHints">
+    <set>Qt::ImhHiddenText|Qt::ImhNoAutoUppercase|Qt::ImhNoPredictiveText</set>
    </property>
    <property name="currentIndex">
     <number>0</number>
@@ -48,12 +51,33 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Custom value</string>
+         <string>Account</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Password</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="password">
+        <property name="inputMethodHints">
+         <set>Qt::ImhHiddenText|Qt::ImhNoAutoUppercase|Qt::ImhNoPredictiveText</set>
+        </property>
+        <property name="echoMode">
+         <enum>QLineEdit::Password</enum>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QLineEdit" name="value"/>
+       <widget class="QLineEdit" name="account">
+        <property name="cursorPosition">
+         <number>0</number>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

@@ -20,19 +20,33 @@
 #   Free Software Foundation, Inc.,
 #
 #   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-#
 
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-from PyKDE4.plasma import *
-from PyQt4 import uic
-from PyKDE4 import plasmascript
+from PyKDE4.kdecore import *
+from PyKDE4.kdeui import *
 
-class ConfigWindow(QWidget):
-    def __init__(self, parent, settings):
-        QWidget.__init__(self)
-        self.ui = uic.loadUi(parent.package().filePath('ui', 'configwindow.ui'), self)
-        self.ui.account.setText(settings.get('account', ''))
-        self.ui.password.setText(settings.get('password', ''))
-        
-        self.parent = parent
+class Wallet():
+	def __init__(self, applet):
+		self.applet = applet
+		self.wallet = None
+		self.open()
+		
+	def open(self):
+		self.wallet = KWallet.Wallet.openWallet(KWallet.Wallet.LocalWallet(), 0)
+		if self.wallet <> None:
+			if not self.wallet.hasFolder(self.applet._name):
+				self.wallet.createFolder(self.applet._name)
+		self.wallet.setFolder(self.applet._name)
+
+	def close(self):
+		self.wallet = None
+		
+	def readPassword(self, key):
+		return self.wallet.readPassword(key)[1]
+		
+	def writePassword(self, key, value):
+		self.wallet.writePassword(key, value)
+		
+	def getWallet(self):
+		return self.wallet

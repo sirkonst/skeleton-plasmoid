@@ -20,7 +20,6 @@
 #   Free Software Foundation, Inc.,
 #
 #   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-#
 
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
@@ -46,6 +45,9 @@ from notifications import *
 # config handler
 from config import *
 
+# wallet 
+from wallet import *
+
 class Skeleton(plasmascript.Applet):
 	def __init__(self, parent, args=None):
 		plasmascript.Applet.__init__(self, parent)
@@ -61,6 +63,9 @@ class Skeleton(plasmascript.Applet):
 		
 		# Setup configuration
 		self.settings = Config(self)
+		
+		# setup wallet
+		self.wallet = Wallet(self)
 		
 		# we have configuration options
 		self.setHasConfigurationInterface(True)
@@ -103,6 +108,8 @@ class Skeleton(plasmascript.Applet):
 		
 	# ---------------------- configuration ------------------------#
 	def createConfigurationInterface(self, parent):
+		self.settings.set('password', self.wallet.readPassword('password'))
+		
 		self.configpage = ConfigWindow(self, self.settings)
 		page = parent.addPage(self.configpage, i18n(self.name()))
 		page.setIcon(KIcon(self.icon()))
@@ -118,8 +125,9 @@ class Skeleton(plasmascript.Applet):
 	# if config accepted
 	def configAccepted(self):
 		# set input (customvalue, see configwindow.ui) text
-		self.settings.set('customvalue', str(self.configpage.ui.value.text()))
-		self._widget.fromconfig.setText(self.settings.get('customvalue'))
+		self.settings.set('account', str(self.configpage.ui.account.text()))
+		self._widget.fromconfig.setText(self.settings.get('account'))
+		self.wallet.writePassword('password', str(self.configpage.ui.password.text()))
 		print '[%s]: config accepted' % self._name
 	
 	# if config denied
