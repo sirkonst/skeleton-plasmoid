@@ -153,13 +153,13 @@ class Skeleton(plasmascript.Applet):
         
 	''' SLOTS '''
 	def notifyAction(self):
-		self.notifications.notify('button-clicked', i18n('Notification fired.'))
+		self.notifications.notify('button-clicked', i18n('Notification fired'))
 		
 	def networkIsDown(self):
-		self.notifications.notify('network-down', i18n('Network is down.'))
+		self.notifications.notify('network-down', i18n('Network is down'))
 		
 	def networkIsUp(self):
-		self.notifications.notify('network-up', i18n('Network is up.'))
+		self.notifications.notify('network-up', i18n('Network is up'))
         
 	
 def CreateApplet(parent):

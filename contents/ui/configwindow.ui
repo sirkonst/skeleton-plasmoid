@@ -36,7 +36,7 @@
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
-     <string>Tab1</string>
+     <string>Account Details</string>
     </attribute>
     <widget class="QWidget" name="gridLayoutWidget_2">
      <property name="geometry">

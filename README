@@ -13,10 +13,10 @@ IMPLEMENTED SO FAR:
 6. Transparent compilation of UI from *.ui files 
 7. Localization 
 8. Wallet integration 
+9  Network state & monitoring
  
 PLANNED: 
 * DataEngines 
-* Solid samples (eg. Networking) 
 * Refactoring of current codebase 
 * Documentation 
 * Your proposals. 
