@@ -48,6 +48,8 @@ from config import *
 # wallet 
 from wallet import *
 
+from networking import *
+
 class Skeleton(plasmascript.Applet):
 	def __init__(self, parent, args=None):
 		plasmascript.Applet.__init__(self, parent)
@@ -67,6 +69,9 @@ class Skeleton(plasmascript.Applet):
 		# setup wallet
 		self.wallet = Wallet(self)
 		
+		self.networking = Networking(self)
+		self.networking.monitorState(self.networkIsDown, self.networkIsUp)
+		
 		# we have configuration options
 		self.setHasConfigurationInterface(True)
 		
@@ -84,7 +89,7 @@ class Skeleton(plasmascript.Applet):
 		
 		# Only register the tooltip in panels
 		if ((self.formFactor() == Plasma.Horizontal) or (self.formFactor() == Plasma.Vertical)):
-			# in panel
+			# panel mode
 			
 			# create and set tooltip
 			tooltip = Plasma.ToolTipContent()
@@ -95,10 +100,10 @@ class Skeleton(plasmascript.Applet):
 			
 			Plasma.ToolTipManager.self().registerWidget(self.applet)
 		else:
-			# not in panel
+			# desktop mode
 			Plasma.ToolTipManager.self().unregisterWidget(self.applet)
 		
-		# define a popup window (on click on icon or when is places on the desktop)
+		# define a popup window
 		self._widget = PopupWindow(self)
 		self._widget.init()
 		self.setGraphicsWidget(self._widget)
@@ -120,7 +125,6 @@ class Skeleton(plasmascript.Applet):
 	# show configuration window
 	def showConfigurationInterface(self):
 		plasmascript.Applet.showConfigurationInterface(self)
-		return
 		
 	# if config accepted
 	def configAccepted(self):
@@ -150,6 +154,12 @@ class Skeleton(plasmascript.Applet):
 	''' SLOTS '''
 	def notifyAction(self):
 		self.notifications.notify('button-clicked', i18n('Notification fired.'))
+		
+	def networkIsDown(self):
+		self.notifications.notify('network-down', i18n('Network is down.'))
+		
+	def networkIsUp(self):
+		self.notifications.notify('network-up', i18n('Network is up.'))
         
 	
 def CreateApplet(parent):

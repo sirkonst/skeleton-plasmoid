@@ -8,3 +8,13 @@ Name=Button Clicked
 Name[be]=Кнопка нацiснута    
 Sound=KDE-Im-New-Mail.ogg
 Action=Popup|Sound
+
+[Event/network-down]
+Name=Disconnected
+Sound=KDE-Im-New-Mail.ogg
+Action=Popup|Sound
+
+[Event/network-up]
+Name=Connected
+Sound=KDE-Im-New-Mail.ogg
+Action=Popup|Sound

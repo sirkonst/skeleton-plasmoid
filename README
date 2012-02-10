@@ -12,14 +12,14 @@ IMPLEMENTED SO FAR:
 5. Custom contextual actions 
 6. Transparent compilation of UI from *.ui files 
 7. Localization 
+8. Wallet integration 
  
 PLANNED: 
-1. Wallet integration 
-2. DataEngines 
-3. Solid samples (eg. Networking) 
-4. Refactoring of current codebase 
-5. Documentation 
-6. Your proposals. 
+* DataEngines 
+* Solid samples (eg. Networking) 
+* Refactoring of current codebase 
+* Documentation 
+* Your proposals. 
  
 NOTE: 
 1. Application does not use self.config() method provided by KDE SC due to some issues. 
